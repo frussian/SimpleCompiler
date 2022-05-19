@@ -15,6 +15,7 @@ enum DomainTag {
     KEYWORD_INT,
     KEYWORD_RETURN,
     KEYWORD_ELSE,
+    KEYWORD_BREAK,
     L_CURLY_BR,
     R_CURLY_BR,
     L_ROUND_BR,
@@ -26,30 +27,44 @@ enum DomainTag {
     MINUS,
     MULTIPLY,
     DIVIDE,
-    LT,
-    GT,
-    EQ,
-    NE,
+    LT,  //<
+    GT,  //>
+    EQ,  //==
+    NE,  //!=
+    NL,  //newline
     END_OF_PROGRAM
+};
+
+class Fragment {
+public:
+    int xs, ys, xe, ye;
+    Fragment(int xs, int ys, int xe, int ye):
+    xs(xs), ys(ys), xe(xe), ye(ye){};
+    explicit Fragment() {
+        xs = ys = xe = ye = 0;
+    }
 };
 
 class Token {
 public:
     DomainTag tag;
-    union {
-        int num;
-        std::string ident;
-    };
-    Token(DomainTag tag, int num):
-        tag(tag), num(num){};
-    Token(DomainTag tag, std::string ident):
-        tag(tag), ident(std::move(ident)){};
-    ~Token(){};
+    int num{};
+    std::string ident;
+    Fragment frag;
+
+    Token(DomainTag tag, int num, Fragment frag):
+        tag(tag), num(num), frag(frag){};
+    Token(DomainTag tag, std::string ident, Fragment frag):
+        tag(tag), ident(std::move(ident)), frag(frag){};
+    explicit Token(DomainTag tag, Fragment frag):
+    tag(tag), frag(frag){};
+    ~Token()= default;
+    void print();
 };
 
 class Lexer {
 public:
-    static std::vector<Token>get_tokens();
+    static std::vector<Token>get_tokens(std::string &program);
 };
 
 
