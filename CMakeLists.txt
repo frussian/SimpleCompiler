@@ -29,7 +29,7 @@ include_directories(/usr/include/llvm-11)
 add_definitions(${LLVM_DEFINITIONS})
 
 # Now build our tools
-add_executable(lab3 main.cpp)
+add_executable(lab3 main.cpp Lexer.cpp Lexer.h)
 # Find the libraries that correspond to the LLVM components
 # that we wish to use
 llvm_map_components_to_libnames(
