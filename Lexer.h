@@ -16,6 +16,7 @@ enum DomainTag {
     KEYWORD_RETURN,
     KEYWORD_ELSE,
     KEYWORD_BREAK,
+    COMMA,
     L_CURLY_BR,
     R_CURLY_BR,
     L_ROUND_BR,
@@ -64,7 +65,7 @@ public:
 
 class Lexer {
 public:
-    static std::vector<Token>get_tokens(std::string &program);
+    static std::vector<Token> get_tokens(std::string &program);
 };
 
 

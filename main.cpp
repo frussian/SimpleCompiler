@@ -11,8 +11,10 @@
 #include <fstream>
 #include <sstream>
 #include <regex>
+#include <memory>
 
 #include "Lexer.h"
+#include "Parser.h"
 
 void test() {
     std::string s = "test2 aw     \n";
@@ -57,7 +59,7 @@ int main(int argc, char *argv[]) {
 //    auto builder = std::make_unique<llvm::IRBuilder<>>(*ctx);
 //    auto module = std::make_unique<llvm::Module>("Module", *ctx);
 //    llvm::FunctionType *main_type = llvm::FunctionType::
-//    get(llvm::Type::getInt32Ty(*ctx), false);
+//        get(llvm::Type::getInt32Ty(*ctx), false);
 //    llvm::Function *f_main = llvm::Function::Create(
 //            main_type, llvm::Function::ExternalLinkage, "main", module.get());
 //    llvm::BasicBlock *entryBB = llvm::BasicBlock::Create(
@@ -66,6 +68,10 @@ int main(int argc, char *argv[]) {
 //
 //    llvm::Value *v1 = builder->getInt32(56);
 //    llvm::Value *v2 = builder->getInt32(41);
+//    llvm::Value *v3 = builder->getInt32(2);
+//    llvm::Value *sum = builder->CreateFAdd(v1, v2);
+//    llvm::Value *mul = builder->CreateFMul(sum, v3);
+//
 ////    llvm::Value *res = builder->CreateCmp(llvm::CmpInst::Predicate::ICMP_EQ, v1, v2);
 //
 //    llvm::BasicBlock *trueBB = llvm::BasicBlock::Create(
@@ -77,7 +83,7 @@ int main(int argc, char *argv[]) {
 //    builder->CreateCondBr(cmp, trueBB, falseBB);
 //
 //    builder->SetInsertPoint(trueBB);
-//    builder->CreateRet(builder->getInt32(1));
+//    builder->CreateRet(mul);
 //    builder->SetInsertPoint(falseBB);
 //    builder->CreateRet(builder->getInt32(0));
 //

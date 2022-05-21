@@ -23,6 +23,7 @@ std::vector<Token> Lexer::get_tokens(std::string &program) {
         regs.emplace_back("^return");
         regs.emplace_back("^else");
         regs.emplace_back("^break");
+        regs.emplace_back("^,");
         regs.emplace_back("^\\{");
         regs.emplace_back("^\\}");
         regs.emplace_back("^\\(");
