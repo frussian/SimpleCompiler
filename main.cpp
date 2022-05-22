@@ -15,6 +15,8 @@
 
 #include "Lexer.h"
 #include "Parser.h"
+#include "Semantics.h"
+#include "Codegen.h"
 
 void test() {
     std::string s = "test2 aw     \n";
@@ -51,10 +53,13 @@ int main(int argc, char *argv[]) {
 
     std::string prog_str = program.str();
     auto tokens = Lexer::get_tokens(prog_str);
-    for (auto & token : tokens) {
-        token.print();
-    }
-
+//    for (auto & token : tokens) {
+//        token.print();
+//    }
+    Parser pars(tokens);
+    auto prog = pars.parse();
+    Semantics::analyse(prog.get());
+    CodeGen::genCode(prog.get());
 //    auto ctx = std::make_unique<llvm::LLVMContext>();
 //    auto builder = std::make_unique<llvm::IRBuilder<>>(*ctx);
 //    auto module = std::make_unique<llvm::Module>("Module", *ctx);
@@ -71,6 +76,9 @@ int main(int argc, char *argv[]) {
 //    llvm::Value *v3 = builder->getInt32(2);
 //    llvm::Value *sum = builder->CreateFAdd(v1, v2);
 //    llvm::Value *mul = builder->CreateFMul(sum, v3);
+//
+//    builder->CreateAlloca(llvm::Type::getInt32Ty(*ctx), nullptr, "stack");
+//    builder->CreateAlloca(llvm::Type::getInt32Ty(*ctx), nullptr, "stack");
 //
 ////    llvm::Value *res = builder->CreateCmp(llvm::CmpInst::Predicate::ICMP_EQ, v1, v2);
 //

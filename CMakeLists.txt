@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(lab3)
-
+#23
 set(CMAKE_CXX_STANDARD 14)
 
 find_package(LLVM 11 REQUIRED CONFIG)
@@ -29,7 +29,7 @@ include_directories(/usr/include/llvm-11)
 add_definitions(${LLVM_DEFINITIONS})
 
 # Now build our tools
-add_executable(lab3 main.cpp Lexer.cpp Lexer.h Parser.cpp Parser.h)
+add_executable(lab3 main.cpp Lexer.cpp Lexer.h Parser.cpp Parser.h Semantics.cpp Semantics.h Codegen.cpp Codegen.h)
 # Find the libraries that correspond to the LLVM components
 # that we wish to use
 llvm_map_components_to_libnames(
