@@ -15,5 +15,5 @@
         }
     }
 
-    return x2
+    return x2 / 2
 }
