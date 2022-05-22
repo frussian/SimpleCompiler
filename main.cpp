@@ -32,16 +32,16 @@ void test() {
 
 int main(int argc, char *argv[]) {
 //    test();
-//    if (argc != 2) {
-//        printf("usage: lab3 <file>");
-//        exit(1);
-//    }
+    if (argc != 2) {
+        printf("usage: lab3 <file>");
+        exit(1);
+    }
 
     std::stringstream program;
     std::ifstream inFile;
     inFile.open(
-//            argv[1]
-            "../test2.txt"
+            argv[1]
+//            "../test2.txt"
             );
     if (inFile.is_open()) {
         program << inFile.rdbuf();
@@ -65,7 +65,11 @@ int main(int argc, char *argv[]) {
         printf("parser failed\n");
         return -2;
     }
-    Semantics::analyse(prog.get());
+    bool ok = Semantics::analyse(prog.get());
+    if (!ok) {
+        printf("semantics failed\n");
+        return -3;
+    }
     CodeGen::genCode(prog.get());
 //    auto ctx = std::make_unique<llvm::LLVMContext>();
 //    auto builder = std::make_unique<llvm::IRBuilder<>>(*ctx);
