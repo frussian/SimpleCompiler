@@ -243,11 +243,14 @@ std::unique_ptr<ASTNode> Parser::parseF() {
 }
 Token Parser::nextToken() {
     i++;
-    return tokens[i];
+    return currToken();
 }
 
 Token Parser::currToken() {
-    return tokens[i];
+    if (i < tokens.size()) {
+        return tokens[i];
+    }
+    return tokens[tokens.size()-1];
 }
 
 Token Parser::peekToken() {

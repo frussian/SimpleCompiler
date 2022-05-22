@@ -23,6 +23,7 @@ enum DomainTag {
     R_ROUND_BR,
     IDENT,
     NUMBER,
+    EQ,  //==
     ASG,
     PLUS,
     MINUS,
@@ -30,7 +31,7 @@ enum DomainTag {
     DIVIDE,
     LT,  //<
     GT,  //>
-    EQ,  //==
+    //==
     NE,  //!=
     NL,  //newline
     END_OF_PROGRAM
@@ -49,7 +50,7 @@ public:
 class Token {
 public:
     DomainTag tag;
-    int num{};
+    int num;
     std::string ident;
     Fragment frag;
 

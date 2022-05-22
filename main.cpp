@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     std::ifstream inFile;
     inFile.open(
 //            argv[1]
-            "../test.txt"
+            "../test2.txt"
             );
     if (inFile.is_open()) {
         program << inFile.rdbuf();
@@ -56,8 +56,15 @@ int main(int argc, char *argv[]) {
 //    for (auto & token : tokens) {
 //        token.print();
 //    }
+    if (tokens.empty()) {
+        return -1;
+    }
     Parser pars(tokens);
     auto prog = pars.parse();
+    if (!prog) {
+        printf("parser failed\n");
+        return -2;
+    }
     Semantics::analyse(prog.get());
     CodeGen::genCode(prog.get());
 //    auto ctx = std::make_unique<llvm::LLVMContext>();

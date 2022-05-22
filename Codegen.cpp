@@ -61,6 +61,7 @@ llvm::CmpInst::Predicate CodeGen::mapToLLVMCmp(ASTCmpOp op) {
 }
 
 llvm::Value *NumberNode::codegen(CodeGenContext *ctx) {
+//    llvm::ConstantFP
     return ctx->builder->getInt32(num);
 }
 
@@ -92,18 +93,20 @@ llvm::Value *BinOpNode::codegen(CodeGenContext *ctx) {
     auto lhsVal = lhs->codegen(ctx);
     auto rhsVal = rhs->codegen(ctx);
     switch (op) {
-        case AST_PLUS: return ctx->builder->CreateFAdd(lhsVal, rhsVal);
-        case AST_MINUS: return ctx->builder->CreateFSub(lhsVal, rhsVal);
-        case AST_MUL: return ctx->builder->CreateFMul(lhsVal, rhsVal);
-        case AST_DIV: return ctx->builder->CreateFDiv(lhsVal, rhsVal);
+        case AST_PLUS: return ctx->builder->CreateAdd(lhsVal, rhsVal);
+        case AST_MINUS: return ctx->builder->CreateSub(lhsVal, rhsVal);
+        case AST_MUL: return ctx->builder->CreateMul(lhsVal, rhsVal);
+        case AST_DIV: return ctx->builder->CreateSDiv(lhsVal, rhsVal);
     }
+//    ctx->builder->CreateAdd()
     return nullptr;
 }
 
 llvm::Value *AsgNode::codegen(CodeGenContext *ctx) {
     auto val = rhs->codegen(ctx);
     auto alloca = defNode->findAlloca(name);
-    return ctx->builder->CreateStore(val, alloca);
+    ctx->builder->CreateStore(val, alloca);
+    return nullptr;
 }
 
 llvm::Value *CondNode::codegen(CodeGenContext *ctx) {
@@ -114,7 +117,8 @@ llvm::Value *CondNode::codegen(CodeGenContext *ctx) {
 
 llvm::Value *StmtsNode::codegen(CodeGenContext *ctx) {
     for (auto stmt: stmts) {
-        stmt->codegen(ctx);
+        auto ret = stmt->codegen(ctx);
+        if (ret) return ret;
     }
     return nullptr;
 }
@@ -122,15 +126,16 @@ llvm::Value *StmtsNode::codegen(CodeGenContext *ctx) {
 llvm::Value *IfNode::codegen(CodeGenContext *ctx) {
     auto condV = cond->codegen(ctx);
     auto main = ctx->module->getFunction("main");
-    auto thenBB = llvm::BasicBlock::Create(*ctx->ctx, "then");
+    auto thenBB = llvm::BasicBlock::Create(*ctx->ctx, "then", main);
     auto mergeBB = llvm::BasicBlock::Create(*ctx->ctx, "merge", main);
 
     ctx->builder->CreateCondBr(condV, thenBB, mergeBB);
     ctx->builder->SetInsertPoint(thenBB);
-    body->codegen(ctx);
+    auto ret = body->codegen(ctx);
+    if (!ret) {
+        ctx->builder->CreateBr(mergeBB);
+    }
 
-    ctx->builder->SetInsertPoint(thenBB);
-    ctx->builder->CreateBr(mergeBB);
     ctx->builder->SetInsertPoint(mergeBB);
     return nullptr;
 }
@@ -142,9 +147,11 @@ llvm::Value *ForNode::codegen(CodeGenContext *ctx) {
     afterBB = afterLoopBB;
     ctx->builder->CreateBr(loopBB);
     ctx->builder->SetInsertPoint(loopBB);
-    body->codegen(ctx);
-    ctx->builder->SetInsertPoint(loopBB);
-    ctx->builder->CreateBr(loopBB);
+    auto ret = body->codegen(ctx);
+    if (!ret) {
+        ctx->builder->CreateBr(loopBB);
+    }
+//    ctx->builder->SetInsertPoint(loopBB);
     ctx->builder->SetInsertPoint(afterLoopBB);
     return nullptr;
 }

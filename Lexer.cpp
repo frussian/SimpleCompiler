@@ -29,7 +29,8 @@ std::vector<Token> Lexer::get_tokens(std::string &program) {
         regs.emplace_back("^\\(");
         regs.emplace_back("^\\)");
         regs.emplace_back("^[a-zA-Z][a-zA-Z0-9]*");
-        regs.emplace_back("^[1-9][0-9]*");
+        regs.emplace_back("^[0-9]+");
+        regs.emplace_back("^==");
         regs.emplace_back("^=");
         regs.emplace_back("^\\+");
         regs.emplace_back("^-");
@@ -37,7 +38,6 @@ std::vector<Token> Lexer::get_tokens(std::string &program) {
         regs.emplace_back("^/");
         regs.emplace_back("^<");
         regs.emplace_back("^>");
-        regs.emplace_back("^==");
         regs.emplace_back("^!=");
         regs.emplace_back("^(\r?)\n");
         regs.emplace_back("^ |\t");

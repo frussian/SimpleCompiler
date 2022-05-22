@@ -1,8 +1,11 @@
 cd cmake-build-debug
 make
-./lab3 1&> test.ll
-llvm-as test.ll
-llc -filetype=obj test.bc
-gcc test.o
+prog=$1
+name=$(basename $prog .txt)
+echo $name
+./lab3 $prog &> $name.ll
+llvm-as $name.ll
+llc -filetype=obj $name.bc
+gcc $name.o
 ./a.out
 echo $?
